@@ -1,140 +1,242 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title> ML Tic Tac Toe</title>
-        <style>
-            body{
-                font-family: Arial, Helvetica, sans-serif;
-                text-align: center;
-                background: #222;
-                color: white;
-            }
-            #board{
-                display: grid;
-                grid-template-columns: repeat(3,100px);
-                grid-gap: 5px;
-                justify-content: center;
-                margin-top: 50px;
-            }
-            .cell{
-                width: 100px;
-                height: 100px;
-                font-size: 2rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background: #333;
-                cursor: pointer;
-                border-radius: 8px;
-            }
-            .cell:hover{
-                background: #444;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>
-            Tic Tac Toe
-        </h1>
-        <div id="board"></div>
-        <script>
-            const boardEl = document.getElementById('board');
-            let board = Array(9).fill(0); // 0 = empty, 1 = human, -1 = bot
-            let gameOver = false;
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Tic Tac Toe</title>
+<style>
+    :root {
+        --cell-size: 110px;
+        --cell-gap: 10px;
+        --x-color: #00f7ff;
+        --o-color: #ff00c8;
+        --board-blur: rgba(255, 255, 255, 0.05);
+    }
 
-            function renderBoard() {
-                boardEl.innerHTML = '';
-                board.forEach((cell, idx) => {
-                    const div = document.createElement('div');
-                    div.classList.add('cell');
-                    div.textContent = cell === 1 ? 'X' : cell === -1 ? 'O' : '';
-                    div.addEventListener('click', () => playerMove(idx));
-                    boardEl.appendChild(div);
-                });
-            }
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: radial-gradient(circle at center, #0a0a0a, #000);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
 
-            function checkWinner() {
-                const wins = [
-                    [0,1,2], [3,4,5], [6,7,8], // rows
-                    [0,3,6], [1,4,7], [2,5,8], // cols
-                    [0,4,8], [2,4,6] // diagonals
-            ];
-            for (let [a,b,c] of wins) {
-                if (board[a] !== 0 && board[a] === board[b] && board[b] === board[c]) {
-                    return board[a]; // 1 = human, -1 = bot
-                }
-            }
-            if (!board.includes(0)) {
-                return 0; // draw
-            }
-            return null; // no winner yet
+    h1 {
+        margin-top: 25px;
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+        color: #fff;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+
+    #board {
+        display: grid;
+        grid-template-columns: repeat(3, var(--cell-size));
+        gap: var(--cell-gap);
+        margin-top: 40px;
+        padding: var(--cell-gap);
+        border-radius: 20px;
+        background: var(--board-blur);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform-style: preserve-3d;
+    }
+
+    #board:hover {
+        transform: perspective(800px) rotateX(5deg) rotateY(5deg);
+        box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+    }
+
+    .cell {
+        width: var(--cell-size);
+        height: var(--cell-size);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.8rem;
+        font-weight: bold;
+        color: white;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        user-select: none;
+        transform: scale(0.95);
+        transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .cell:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1);
+    }
+
+    .cell.x {
+        color: var(--x-color);
+        text-shadow: 0 0 10px var(--x-color), 0 0 20px var(--x-color);
+        animation: dropIn 0.3s ease;
+    }
+
+    .cell.o {
+        color: var(--o-color);
+        text-shadow: 0 0 10px var(--o-color), 0 0 20px var(--o-color);
+        animation: dropIn 0.3s ease;
+    }
+
+    @keyframes dropIn {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1); }
+    }
+
+    /* Winner Overlay */
+    #overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        font-size: 2rem;
+        animation: fadeIn 0.3s ease;
+        text-align: center;
+    }
+
+    #overlay button {
+        padding: 12px 25px;
+        font-size: 1rem;
+        margin-top: 20px;
+        border: none;
+        border-radius: 8px;
+        background: #00f7ff;
+        color: black;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight: bold;
+    }
+
+    #overlay button:hover {
+        background: #00d6dd;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 500px) {
+        :root {
+            --cell-size: 90px;
+            --cell-gap: 8px;
         }
+        h1 { font-size: 2rem; }
+    }
 
-        function showResult(winner) {
-            gameOver = true;
-            let message = '';
-            if (winner === 1) message = '🎉 You Won!';
-            else if (winner === -1) message = '🤖 Bot Won!';
-            else message = '🤝 Draw!';
+    @media (max-width: 350px) {
+        :root {
+            --cell-size: 70px;
+            --cell-gap: 6px;
+        }
+        h1 { font-size: 1.5rem; }
+    }
+</style>
+</head>
+<body>
 
-            // Create overlay
-            const overlay = document.createElement('div');
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.background = 'rgba(0,0,0,0.8)';
-            overlay.style.color = 'white';
-            overlay.style.display = 'flex';
-            overlay.style.flexDirection = 'column';
-            overlay.style.justifyContent = 'center';
-            overlay.style.alignItems = 'center';
-            overlay.style.fontSize = '2rem';
-            overlay.innerHTML = `
+<h1>Tic Tac Toe</h1>
+<div id="board"></div>
+
+<script>
+    const boardEl = document.getElementById('board');
+    let board = Array(9).fill(0);
+    let gameOver = false;
+
+    function renderBoard() {
+        boardEl.innerHTML = '';
+        board.forEach((cell, idx) => {
+            const div = document.createElement('div');
+            div.classList.add('cell');
+            if (cell === 1) div.classList.add('x'), div.textContent = 'X';
+            else if (cell === -1) div.classList.add('o'), div.textContent = 'O';
+            div.addEventListener('click', () => playerMove(idx));
+            boardEl.appendChild(div);
+        });
+    }
+
+    function checkWinner() {
+        const wins = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+        for (let [a,b,c] of wins) {
+            if (board[a] !== 0 && board[a] === board[b] && board[b] === board[c]) {
+                return board[a];
+            }
+        }
+        if (!board.includes(0)) return 0;
+        return null;
+    }
+
+    function showResult(winner) {
+        gameOver = true;
+        let message = '';
+        if (winner === 1) message = '🎉 You Won!';
+        else if (winner === -1) message = '🤖 Bot Won!';
+        else message = '🤝 Draw!';
+
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        overlay.innerHTML = `
             <p>${message}</p>
-            <button id="restartBtn" style="padding:10px 20px; font-size:1rem; margin-top:20px;">Restart Game</button>
-            `;
-            document.body.appendChild(overlay);
-            document.getElementById('restartBtn').addEventListener('click', () => {
-                board = Array(9).fill(0);
-                gameOver = false;
-                overlay.remove();
-                renderBoard();
-                });
-            }
-
-            function playerMove(index) {
-                if (gameOver || board[index] !== 0) return;
-                board[index] = 1;
-                renderBoard();
-                let winner = checkWinner();
-                if (winner !== null) {
-                    showResult(winner);
-                    return;
-                }
-                fetchBotMove();
-            }
-
-            async function fetchBotMove() {
-                const res = await fetch('http://127.0.0.1:5000/move', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ board })
-                });
-                const data = await res.json();
-                if (data.move !== null && board[data.move] === 0) {
-                    board[data.move] = -1;
-                }
-                renderBoard();
-                let winner = checkWinner();
-                if (winner !== null) {
-                    showResult(winner);
-                }
-            }
+            <button id="restartBtn">Restart Game</button>
+        `;
+        document.body.appendChild(overlay);
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            board = Array(9).fill(0);
+            gameOver = false;
+            overlay.remove();
             renderBoard();
-        </script>
-    </body>
-</html>
+        });
+    }
 
+    function playerMove(index) {
+        if (gameOver || board[index] !== 0) return;
+        board[index] = 1;
+        renderBoard();
+        let winner = checkWinner();
+        if (winner !== null) {
+            showResult(winner);
+            return;
+        }
+        fetchBotMove();
+    }
+
+    async function fetchBotMove() {
+        const res = await fetch('http://127.0.0.1:5000/move', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ board })
+        });
+        const data = await res.json();
+        if (data.move !== null && board[data.move] === 0) {
+            board[data.move] = -1;
+        }
+        renderBoard();
+        let winner = checkWinner();
+        if (winner !== null) {
+            showResult(winner);
+        }
+    }
+
+    renderBoard();
+</script>
+
+</body>
+</html>
