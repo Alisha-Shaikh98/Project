@@ -3,3 +3,4 @@ gunicorn
 numpy
 flask-cors
 tqdm
+jsonify

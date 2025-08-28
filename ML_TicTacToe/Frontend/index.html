@@ -219,7 +219,8 @@
     }
 
     async function fetchBotMove() {
-        const res = await fetch('https://project-a8eo.onrender.com/move', {
+        /* const res = await fetch('https://project-a8eo.onrender.com/move', {*/
+        const res = await fetch('http://127.0.0.1:5000/move', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ board })
