@@ -1,0 +1,134 @@
+/* Backgrounds */
+body.dark-mode {
+  background: linear-gradient(135deg, #0a0f1a, #101432);
+  color: #EAF2FF;
+}
+body.light-mode {
+  background: linear-gradient(135deg, #f7fbff, #eef2ff);
+  color: #0a0f1a;
+}
+.skills-section {
+  text-align: center;
+  padding: 80px 20px;
+  overflow: hidden;
+}
+
+.skills-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: #22D3EE;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+}
+
+.skills-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.skills-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.skills-track.reverse {
+  animation: scroll-right 25s linear infinite;
+}
+
+.skills-marquee:hover .skills-track {
+  animation-play-state: paused;
+}
+
+/* Skills card */
+.skill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.2rem;
+  min-width: 120px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(34, 211, 238, 0.4);
+  transition: all 0.3s ease;
+}
+
+.skill i {
+  font-size: 2.5rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover glow */
+.skill:hover {
+  border-color: #22D3EE;
+  box-shadow: 0 0 12px #22D3EE, 0 0 25px rgba(34, 211, 238, 0.7);
+  transform: scale(1.1);
+}
+.skill:hover i {
+  color: #A78BFA;
+  transform: scale(1.3);
+}
+.skill span {
+  margin-top: 6px;
+  font-size: 1rem;
+}
+
+/* Keyframes */
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); } /* ✅ fix: use -50% not +50% */
+}
+
+
+/* Light Mode */
+body.light-mode .skills-title {
+  color: #06B6D4;
+}
+body.light-mode .skill:hover {
+  border-color: #06B6D4;
+  box-shadow: 0 0 12px #06B6D4, 0 0 25px rgba(6, 182, 212, 0.6);
+}
+
+@media (max-width: 768px) {
+  .skill {
+    min-width: 100px;
+    font-size: 1rem;
+    padding: 16px;
+  }
+
+  .skill i {
+    font-size: 2rem;
+  }
+
+  .skills-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skill {
+    min-width: 80px;
+    padding: 10px;
+  }
+
+  .skill i {
+    font-size: 1.6rem;
+  }
+
+  .skills-title {
+    font-size: 1.8rem;
+  }
+  
+  .skills-track{
+    gap: 10px
+  }
+}

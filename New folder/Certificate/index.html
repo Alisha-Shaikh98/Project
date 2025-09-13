@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificates - Alisha Shaikh</title>
+
+  <!-- Font Awesome (icons) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark-mode">
+  
+  <!-- Theme Toggle -->
+  <button id="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-sun"></i>
+  </button>
+
+  <section id="certificates">
+    <h2 class="section-title">Certificates</h2>
+
+    <div class="carousel-container">
+      <div class="carousel" id="certificates-box">
+        <!-- Cards injected dynamically -->
+      </div>
+      <div class="buttons">
+        <span class="prev"></span>
+        <span class="next"></span>
+      </div>
+    </div>
+     <!-- Mobile Grid -->
+  <div class="certificates-grid mobile-view" id="certificates-grid">
+    <!-- Cards injected dynamically for mobile -->
+  </div>
+  </section>
+  
+
+  <!-- PapaParse (CSV) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <!-- Your Script -->
+  <script src="script.js"></script>
+
+</body>
+</html>

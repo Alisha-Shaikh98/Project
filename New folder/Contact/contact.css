@@ -1,0 +1,136 @@
+body.dark-mode {
+  background: linear-gradient(135deg, #0a0f1a, #101432);
+  color: #EAF2FF;
+}
+body.light-mode {
+  background: linear-gradient(135deg, #f7fbff, #eef2ff);
+  color: #0a0f1a;
+}
+
+.connect-section {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.connect-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: #22D3EE;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+}
+
+.connect-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.connect-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid rgba(34, 211, 238, 0.6);
+  transition: all 0.3s ease;
+}
+
+.connect-btn i {
+  font-size: 1.3rem;
+  transition: transform 0.25s ease;
+}
+
+/* Hover (desktop) */
+.connect-btn:hover {
+  border-color: #22D3EE;
+  box-shadow: 0 0 12px #22D3EE, 0 0 24px rgba(34, 211, 238, 0.7);
+  transform: translateY(-2px);
+}
+.connect-btn:hover i {
+  transform: scale(1.3);
+  color: #A78BFA;
+}
+
+/* Active (mobile tap) */
+.connect-btn:active {
+  border-color: #22D3EE;
+  box-shadow: 0 0 16px #22D3EE, 0 0 32px rgba(34, 211, 238, 0.8);
+  transform: scale(0.96);
+}
+.connect-btn:active i {
+  transform: scale(1.4);
+  color: #A78BFA;
+}
+
+/* Light mode tweaks */
+body.light-mode .connect-title {
+  color: #06B6D4;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+body.light-mode .connect-btn {
+  border-color: rgba(6, 182, 212, 0.5);
+}
+body.light-mode .connect-btn:hover {
+  border-color: #06B6D4;
+  box-shadow: 0 0 12px #06B6D4, 0 0 24px rgba(6, 182, 212, 0.6);
+}
+body.light-mode .connect-btn:active {
+  border-color: #06B6D4;
+  box-shadow: 0 0 16px #06B6D4, 0 0 32px rgba(6, 182, 212, 0.7);
+}
+
+/* ------------------------ RESPONSIVE DESIGN -------------------------*/
+
+/* Tablets */
+@media (max-width: 900px) {
+  .connect-title {
+    font-size: 2.5rem;
+  }
+
+  .connect-btn {
+    font-size: 1rem;
+    padding: 12px 22px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .connect-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .connect-btn {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .connect-btn i {
+    font-size: 1.2rem;
+  }
+}
+
+/* ------------------------ Scroll fade-in -------------------------*/
+.connect-btn {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease, box-shadow 0.3s ease;
+}
+
+.connect-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
